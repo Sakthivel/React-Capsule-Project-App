@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 const styles = {
     chatText : {
         border: '2px solid darkblue',
-        padding: '20px 10px 40px',
-        width: '94%',
+        padding: '20px 11px 30px',
+        width: '95%',
         backgroundColor: 'aliceblue'
     }
 }

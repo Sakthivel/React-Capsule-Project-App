@@ -143,6 +143,11 @@ class Chat extends Component {
         this.setState({ openUserModal: false });
     }
 
+    logout() {
+        localStorage.setItem('loggedInUser', '');
+        window.location.reload();
+    }
+
     render() {
         const currentUser = this.props.currentUser || {};
         const users = currentUser ? currentUser.users : [];
@@ -189,6 +194,10 @@ class Chat extends Component {
 
                         <Button style={styles.userModal} variant="contained" fullWidth color="primary" onClick={this.removeUserFromRoom.bind(this)} aria-label="Remove User">
                             Leave From Room
+                        </Button>
+
+                        <Button style={styles.userModal} variant="contained" fullWidth color="secondary" onClick={this.logout.bind(this)} aria-label="User Logout">
+                            Sign Out
                         </Button>
 
                         <Modal aria-labelledby="simple-modal-title"

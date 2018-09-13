@@ -11,27 +11,39 @@ class App extends Component {
   };
 
   constructor(props) {
-    super(props)
+    super();
+
     this.state = {
-      username: ''
+      username: '',
+      screen: ''
     }
-    this.onUserEntry = this.onUserEntry.bind(this)
+
+    this.onCheckUserStatus();
   }
 
-  onUserEntry(username) {
+  onCheckUserStatus() {
+    let loggedInUser = localStorage.getItem('loggedInUser');
 
+    if (loggedInUser) {
+      this.state = {
+        username: loggedInUser,
+        screen: 'Chat'
+      }
+    }
+  }
+
+  onSignIn(username) {
     this.props.dispatch({
       type: 'GET_USERNAME',
       username
     });
-
   }
 
   render() {
-    const screen_ = this.props.screen || '';
-    const username_ = this.props.username || '';
+    const screen_ = this.props.screen || this.state.screen;
+    const username_ = this.props.username || this.state.username;
     if (screen_ === '') {
-      return <Login onSubmit={this.onUserEntry} />
+      return <Login onSubmit={this.onSignIn.bind(this)} />
     }
     if (screen_ === 'Chat') {
       return <Chat username={username_} />
