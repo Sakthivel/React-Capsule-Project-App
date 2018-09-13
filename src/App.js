@@ -12,26 +12,14 @@ class App extends Component {
 
   constructor(props) {
     super();
-
-    this.state = {
-      username: '',
-      screen: ''
-    }
-
-    this.onCheckUserStatus();
-  }
-
-  onCheckUserStatus() {
     let loggedInUser = localStorage.getItem('loggedInUser');
 
-    if (loggedInUser) {
-      this.state = {
-        username: loggedInUser,
-        screen: 'Chat'
-      }
+    this.state = {
+      username: loggedInUser ? loggedInUser : '',
+      screen: loggedInUser ? 'Chat' : ''
     }
   }
-
+  
   onSignIn(username) {
     this.props.dispatch({
       type: 'GET_USERNAME',
