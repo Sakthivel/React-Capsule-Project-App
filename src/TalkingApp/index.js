@@ -94,7 +94,7 @@ function TalkingApp(currState, action) {
                         text: 'You Have Joined into Room!!',
                         senderId: ''
                     }],
-                    roomId: currState.roomId,
+                    roomId: action.currentRoomId,
                     joinableRooms: currState.joinableRooms
             })
 

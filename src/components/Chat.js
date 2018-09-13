@@ -10,6 +10,7 @@ import Modal from '@material-ui/core/Modal';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import JoinableRooms from './JoinableRooms';
+import MyRooms from './MyRooms';
 
 const styles = {
     chatBox : {
@@ -41,12 +42,12 @@ class Chat extends Component {
 
     constructor (props) {
         super();
-
+        const localRoomId = props.roomId ? props.roomId : 15456697;
         this.state = {
             currentUser: {},
             currentRoom: {},
             messages: [],
-            roomId: 15456697,
+            roomId: localRoomId,
             update: true,
             newRoom: true,
             openModal: false,
@@ -59,21 +60,29 @@ class Chat extends Component {
         this.sendMessage = this.sendMessage.bind(this);
     }
 
+    loadMyRoomMessages() {
+        this.props.dispatch({
+            type: 'GET_MESSAGE',
+            roomId: this.state.roomId || 15456697,
+            currentUser: this.props.currentUser
+        });
+    }
+
     sendMessage(text) {
         this.props.currentUser.sendMessage({
             text,
-            roomId: this.props.roomId || 15456697
-        })
+            roomId: this.state.roomId || 15456697
+        });
 
         this.props.dispatch({
             type: 'GET_MESSAGE',
-            roomId: this.props.roomId || 15456697,
+            roomId: this.state.roomId || 15456697,
             currentUser: this.props.currentUser
         });
 
         this.setState({
-            update:true
-        })
+            update: true
+        });
     }
 
     componentDidMount () {
@@ -101,6 +110,12 @@ class Chat extends Component {
             });
             this.handleClose();
         }
+
+        this.setState({
+            update: true
+        });
+
+        this.loadMyRoomMessages();
     }
 
     handleOpen() {
@@ -121,11 +136,17 @@ class Chat extends Component {
             this.props.dispatch({
                 type: 'GET_NEW_USER',
                 currentUser: this.props.currentUser,
-                roomId: this.props.roomId || 15456697,
+                roomId: this.state.roomId || 15456697,
                 user: this.state.newUserName
             });
             this.handleCloseUser();
         }
+
+        this.setState({
+            update: true
+        });
+
+        this.loadMyRoomMessages();
     }
 
     removeUserFromRoom(e) {
@@ -133,8 +154,14 @@ class Chat extends Component {
         this.props.dispatch({
             type: 'GET_REMOVE_USER',
             currentUser: this.props.currentUser,
-            roomId: this.props.roomId || 15456697
+            roomId: this.state.roomId || 15456697
         });
+
+        this.setState({
+            update: true
+        });
+
+        this.loadMyRoomMessages();
     }
 
     handleOpenUser() {
@@ -150,11 +177,21 @@ class Chat extends Component {
         window.location.reload();
     }
     onAddMember(id) {
-         this.props.dispatch({
-             type: 'GET_INTO_ROOM',
-             currentUser: this.props.currentUser,
-             roomId: id,
+         this.props.currentUser.joinRoom({
+             roomId: id
          });
+
+         this.setState({
+             update: true,
+             roomId: id
+         });
+    }
+
+    onChangeMyRoom(id) {
+        this.setState({
+            update: true,
+            roomId: id
+        });
     }
 
     render() {
@@ -162,18 +199,17 @@ class Chat extends Component {
         const users = currentUser ? currentUser.users : [];
         const messages = this.props.messages || [];
         const joinableRooms = this.props.joinableRooms || [];
+        const rooms = currentUser ? currentUser.rooms : [];
 
         if(users && users.length && (this.state.update === true || this.state.newRoom === true) ){
-            
             this.props.dispatch({
                 type: 'GET_JOINABLE_ROOM',
                 currentUser: this.props.currentUser,
-                roomId: this.props.roomId || 15456697,
+                roomId: this.state.roomId || 15456697,
             });
-
             this.props.dispatch({
                 type: 'GET_MESSAGE',
-                roomId: this.props.roomId || 15456697,
+                roomId: this.state.roomId || 15456697,
                 currentUser: this.props.currentUser
             });
 
@@ -181,6 +217,8 @@ class Chat extends Component {
                 update:false,
                 newRoom: false
             });
+
+            localStorage.setItem('loggedInUserRoomId', this.state.roomId);
         }
 
         return (
@@ -219,6 +257,8 @@ class Chat extends Component {
                         <Button style={styles.userModal} variant="contained" fullWidth color="secondary" onClick={this.logout.bind(this)} aria-label="User Logout">
                             Sign Out
                         </Button>
+
+                        <MyRooms myRooms={rooms} currentRoomId={this.state.roomId} myRoom={this.onChangeMyRoom.bind(this)} />
 
                         <Modal aria-labelledby="simple-modal-title"
                                aria-describedby="simple-modal-description"

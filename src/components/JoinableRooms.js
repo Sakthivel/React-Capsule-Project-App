@@ -17,18 +17,20 @@ const styles = {
 class JoinableRooms extends Component {
 
     addMeRoom(id) {
-        this.props.onAdd(id);
+        if(typeof(id) === 'number') {
+            this.props.onAdd(id);
+        }
     }
 
     render() {
         if (this.props.joinableRooms) {
             return  <Fragment>
-                    <h2>Public Rooms</h2>
+                    <h2>Public Joinable Rooms</h2>
                     <List component="nav" style={styles.wrapper}>
                     {this.props.joinableRooms.map((room, index) => {
                         return (
                                     <ListItem style={styles.list} onClick={this.addMeRoom.bind(this, room.id)} key={room.id} button>
-                                        <ListItemText primary={room.name} onClick={this.addMeRoom.bind(this)}/>
+                                        <ListItemText primary={room.name}/>
                                     </ListItem>
                                 )
                         })

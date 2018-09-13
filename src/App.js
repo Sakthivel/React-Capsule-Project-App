@@ -13,9 +13,11 @@ class App extends Component {
   constructor(props) {
     super();
     let loggedInUser = localStorage.getItem('loggedInUser');
+    let roomid = localStorage.getItem('loggedInUserRoomId');
     this.state = {
       username: loggedInUser ? loggedInUser : '',
-      screen: loggedInUser ? 'Chat' : ''
+      screen: loggedInUser ? 'Chat' : '',
+      roomId: roomid ? roomid : ''
     }
   }
   
@@ -29,18 +31,20 @@ class App extends Component {
   render() {
     const screen_ = this.props.screen || this.state.screen;
     const username_ = this.props.username || this.state.username;
+    const roomid_ = this.props.roomId || this.state.roomId;
     if (screen_ === '') {
       return <Login onSubmit={this.onSignIn.bind(this)} />
     }
     if (screen_ === 'Chat') {
-      return <Chat username={username_} />
+      return <Chat username={username_} roomId={roomid_} />
     }
   }
 }
 
 const mapStateToProps = (state) => ({
   screen: state.screen,
-  username : state.username
+  username : state.username,
+  roomId: state.roomId
 });
 
 export default connect(mapStateToProps) (App)

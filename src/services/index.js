@@ -9,6 +9,7 @@ if (window.location.hostname === 'localhost') {
 
 export function getUserName(username) {
     localStorage.setItem('loggedInUser', username);
+    localStorage.setItem('loggedInUserRoomId', 15456697);
     return axios.post(hostName + '/users',{ username }).then(result => new Promise((resolve, reject) => {
         resolve(username);
     })).catch(error => {return username})
@@ -88,16 +89,4 @@ export function joinableRoom(action) {
         .catch(err => {
             console.log(`Error getting joinable rooms: ${err}`)
         }))
-}
-
-export function joinRoom(action) {
-    return action.currentUser.joinRoom({
-            roomId: action.roomid
-        })
-        .then(room => {
-            console.log(`Joined room with ID: ${action.roomid}`)
-        })
-        .catch(err => {
-            console.log(`Error joining room ${action.roomid}: ${err}`)
-        })
 }
