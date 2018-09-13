@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import Modal from '@material-ui/core/Modal';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
+import JoinableRooms from './JoinableRooms';
 
 const styles = {
     chatBox : {
@@ -51,7 +52,8 @@ class Chat extends Component {
             openModal: false,
             openUserModal: false,
             newRoomName: '',
-            newUserName: ''
+            newUserName: '',
+            joinableRooms: []
         }
 
         this.sendMessage = this.sendMessage.bind(this);
@@ -147,13 +149,28 @@ class Chat extends Component {
         localStorage.setItem('loggedInUser', '');
         window.location.reload();
     }
+    onAddMember(id) {
+         this.props.dispatch({
+             type: 'GET_INTO_ROOM',
+             currentUser: this.props.currentUser,
+             roomId: id,
+         });
+    }
 
     render() {
         const currentUser = this.props.currentUser || {};
         const users = currentUser ? currentUser.users : [];
         const messages = this.props.messages || [];
+        const joinableRooms = this.props.joinableRooms || [];
 
         if(users && users.length && (this.state.update === true || this.state.newRoom === true) ){
+            
+            this.props.dispatch({
+                type: 'GET_JOINABLE_ROOM',
+                currentUser: this.props.currentUser,
+                roomId: this.props.roomId || 15456697,
+            });
+
             this.props.dispatch({
                 type: 'GET_MESSAGE',
                 roomId: this.props.roomId || 15456697,
@@ -171,6 +188,8 @@ class Chat extends Component {
                 <Grid container spacing={24}>
                     <Grid item xs={4}>
                         <UsersList currentUser={currentUser} users={users} />
+
+                        <JoinableRooms joinableRooms={joinableRooms} onAdd={this.onAddMember.bind(this)} />
                     </Grid>
                     <Grid item xs={4}>
                         <div  ref='scroll' style={styles.chatBox}>
@@ -184,6 +203,7 @@ class Chat extends Component {
 
                     </Grid>
                     <Grid item xs={4}>
+                        <h2>List Of Actions</h2>
                         <Button variant="contained" fullWidth color="primary" onClick={this.handleOpen.bind(this)} aria-label="Create Room">
                             Create Room
                         </Button>
@@ -258,7 +278,8 @@ class Chat extends Component {
 const mapStateToProps = (state) => ({
     messages: state.messages,
     currentUser: state.currentUser,
-    roomId: state.roomId
+    roomId: state.roomId,
+    joinableRooms: state.joinableRooms
 });
 
 export default connect(mapStateToProps) (Chat);

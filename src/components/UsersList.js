@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -21,7 +21,9 @@ class UsersList extends Component {
 
   render() {
     if (this.props.users) {
-      return  <List component="nav" style={styles.wrapper}>
+      return  <Fragment>
+        <h2>List Of Users</h2>
+        <List component="nav" style={styles.wrapper}>
         {this.props.users.map((user, index) => {
           if (user.id === this.props.currentUser.id) {
             return (
@@ -36,7 +38,7 @@ class UsersList extends Component {
               </ListItem>
           )
         })}
-      </List>
+      </List></Fragment>
     } else {
       return <p>Loading User...</p>
     }

@@ -13,7 +13,8 @@ function TalkingApp(currState, action) {
                 username: action.username,
                 messages: [],
                 roomId: currState.roomId,
-                currentUser : {}
+                currentUser : {},
+                joinableRooms: []
             })
 
         case 'SET_MESSAGE':
@@ -22,7 +23,8 @@ function TalkingApp(currState, action) {
                 username: currState.username,
                 currentUser: currState.currentUser,
                 roomId: currState.roomId,
-                messages : action.messages
+                messages : action.messages,
+                joinableRooms: currState.joinableRooms
             })
 
         case 'SET_CURRENT_USER':
@@ -31,7 +33,8 @@ function TalkingApp(currState, action) {
                 username: currState.username,
                 messages : currState.messages,
                 roomId: currState.roomId,
-                currentUser: action.currentUser
+                currentUser: action.currentUser,
+                joinableRooms: currState.joinableRooms
             })
 
         case 'SET_NEW_ROOM':
@@ -43,7 +46,8 @@ function TalkingApp(currState, action) {
                     text: 'NEW ROOM HAS CREATED!!',
                     senderId: currState.username
                 }],
-                roomId: action.room.id
+                roomId: action.room.id,
+                joinableRooms: currState.joinableRooms
             })
 
         case 'SET_NEW_USER':
@@ -55,7 +59,8 @@ function TalkingApp(currState, action) {
                     text: 'NEW USER HAS ADDED HERE!!',
                     senderId: currState.username
                 }],
-                roomId: currState.roomId
+                roomId: currState.roomId,
+                joinableRooms: currState.joinableRooms
             })
 
         case 'SET_REMOVE_USER':
@@ -67,7 +72,30 @@ function TalkingApp(currState, action) {
                     text: 'YOU ARE LEFT THE ROOM!!',
                     senderId: ''
                 }],
-                roomId: currState.roomId
+                roomId: currState.roomId,
+                joinableRooms: currState.joinableRooms
+            })
+        case 'SET_JOINABLE_ROOM':
+            return Object.assign({}, {
+                screen: 'Chat',
+                joinableRooms: action.room,
+                username: currState.username,
+                currentUser: currState.currentUser,
+                roomId: currState.roomId,
+                messages: currState.messages
+            })
+
+        case 'SET_INTO_ROOM':
+            return Object.assign({}, {
+                    screen: 'Chat',
+                    username: currState.username,
+                    currentUser: currState.currentUser,
+                    messages: [{
+                        text: 'You Have Joined into Room!!',
+                        senderId: ''
+                    }],
+                    roomId: currState.roomId,
+                    joinableRooms: currState.joinableRooms
             })
 
         default:

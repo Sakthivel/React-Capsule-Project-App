@@ -30,7 +30,7 @@ export function userMessage(action) {
     return action.currentUser.fetchMessages({
         roomId: action.roomId,
         direction: 'older',
-        limit: 100,
+        limit: 30,
     })
     .then(messages => new Promise((resolve, reject) => {
         resolve(messages)
@@ -43,7 +43,7 @@ export function userMessage(action) {
 export function newChatRoom(action) {
     return action.currentUser.createRoom({
         name: action.roomName,
-        private: true,
+        private: false,
         user_ids: action.currentUser.id
     })
     .then(room => new Promise((resolve, reject) => {
@@ -79,4 +79,25 @@ export function leaveUserFromRoom(action) {
     action.currentUser.disconnect();
 
     return true;
+}
+
+export function joinableRoom(action) {
+    return action.currentUser.getJoinableRooms().then(rooms => new Promise((resolve, reject) => {
+           resolve(rooms);
+        })
+        .catch(err => {
+            console.log(`Error getting joinable rooms: ${err}`)
+        }))
+}
+
+export function joinRoom(action) {
+    return action.currentUser.joinRoom({
+            roomId: action.roomid
+        })
+        .then(room => {
+            console.log(`Joined room with ID: ${action.roomid}`)
+        })
+        .catch(err => {
+            console.log(`Error joining room ${action.roomid}: ${err}`)
+        })
 }

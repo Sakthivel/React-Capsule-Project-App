@@ -10,7 +10,8 @@ import {
     userMessage,
     newChatRoom,
     addNewUser,
-    leaveUserFromRoom
+    leaveUserFromRoom,
+    joinableRoom
 } from './services';
 
 function* getUserNameSaga(action) {
@@ -43,6 +44,17 @@ function* removeUserSaga(action) {
     yield put({ type: 'SET_REMOVE_USER', user });
 }
 
+function* joinableRoomSaga(action) {
+    const room = yield call(joinableRoom, action);
+    yield put({ type: 'SET_JOINABLE_ROOM', room });
+}
+
+function* getRoomSaga(action) {
+    const room = yield call(joinableRoom, action);
+    yield put({ type: 'SET_INTO_ROOM', room });
+}
+
+
 export default function* sagas() {
     yield takeLatest('GET_USERNAME', getUserNameSaga);
     yield takeLatest('GET_CURRENT_USER', getCurrentUserSaga);
@@ -50,4 +62,6 @@ export default function* sagas() {
     yield takeLatest('GET_NEW_ROOM', newChatRoomSaga);
     yield takeEvery('GET_NEW_USER', addNewUserSaga);
     yield takeEvery('GET_REMOVE_USER', removeUserSaga);
+    yield takeEvery('GET_JOINABLE_ROOM', joinableRoomSaga);
+    yield takeEvery('GET_INTO_ROOM', getRoomSaga);
 }
