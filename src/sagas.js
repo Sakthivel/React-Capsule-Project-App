@@ -1,18 +1,5 @@
-import {
-    call,
-    put,
-    takeLatest,
-    takeEvery
-} from 'redux-saga/effects'
-import {
-    getUserName,
-    getCurrentUser,
-    userMessage,
-    newChatRoom,
-    addNewUser,
-    leaveUserFromRoom,
-    joinableRoom
-} from './services';
+import {call, put, takeLatest, takeEvery} from 'redux-saga/effects';
+import {getUserName, getCurrentUser, userMessage, newChatRoom, addNewUser, leaveUserFromRoom, joinableRoom } from './services';
 
 function* getUserNameSaga(action) {
     const username = yield call(getUserName, action.username);
