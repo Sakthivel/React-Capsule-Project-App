@@ -13,7 +13,6 @@ class App extends Component {
   constructor(props) {
     super();
     let loggedInUser = localStorage.getItem('loggedInUser');
-
     this.state = {
       username: loggedInUser ? loggedInUser : '',
       screen: loggedInUser ? 'Chat' : ''
