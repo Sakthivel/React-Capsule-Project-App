@@ -1,47 +1,48 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component, Fragment } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
 const styles = {
-    wrapper: {
-        padding: '10px'
-    },
-    list: {
-        background: '#00b0ff',
-        cursor: 'default'
-    },
-    highlighted: {
-        background: '#007bb2',
-        cursor: 'default'
-    }
-}
+  wrapper: {
+    padding: '10px',
+  },
+  list: {
+    background: '#00b0ff',
+    cursor: 'default',
+  },
+  highlighted: {
+    background: '#007bb2',
+    cursor: 'default',
+  },
+};
 
 class UsersList extends Component {
-
   render() {
     if (this.props.users) {
-      return  <Fragment>
-        <h2>List Of Users</h2>
-        <List component="nav" style={styles.wrapper}>
-        {this.props.users.map((user, index) => {
-          if (user.id === this.props.currentUser.id) {
-            return (
-              <ListItem style={styles.highlighted} key={user.id} button>
-                <ListItemText primary={user.name} />
-              </ListItem>
-            )
-          }
-          return (
-            <ListItem style={styles.list}  key={user.id} button>
-                <ListItemText primary={user.name} />
-              </ListItem>
-          )
-        })}
-      </List></Fragment>
-    } else {
-      return <p>Loading User...</p>
+      return (
+        <Fragment>
+          <h2>List Of Users</h2>
+          <List component="nav" style={styles.wrapper}>
+            {this.props.users.map((user, index) => {
+              if (user.id === this.props.currentUser.id) {
+                return (
+                  <ListItem style={styles.highlighted} key={user.id} button>
+                    <ListItemText primary={user.name} />
+                  </ListItem>
+                );
+              }
+              return (
+                <ListItem style={styles.list} key={user.id} button>
+                  <ListItemText primary={user.name} />
+                </ListItem>
+              );
+            })}
+          </List>
+        </Fragment>
+      );
     }
+    return <p>Loading User...</p>;
   }
 }
 

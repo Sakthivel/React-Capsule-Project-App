@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Login from './components/Login';
 import Chat from './components/Chat';
-import {connect} from 'react-redux';
 
 class App extends Component {
   static propTypes = {
@@ -12,19 +12,19 @@ class App extends Component {
 
   constructor(props) {
     super();
-    let loggedInUser = localStorage.getItem('loggedInUser');
-    let roomid = localStorage.getItem('loggedInUserRoomId');
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    const roomid = localStorage.getItem('loggedInUserRoomId');
     this.state = {
-      username: loggedInUser ? loggedInUser : '',
+      username: loggedInUser || '',
       screen: loggedInUser ? 'Chat' : '',
-      roomId: roomid ? roomid : ''
-    }
+      roomId: roomid || '',
+    };
   }
-  
+
   onSignIn(username) {
     this.props.dispatch({
       type: 'GET_USERNAME',
-      username
+      username,
     });
   }
 
@@ -33,18 +33,18 @@ class App extends Component {
     const username_ = this.props.username || this.state.username;
     const roomid_ = this.props.roomId || this.state.roomId;
     if (screen_ === '') {
-      return <Login onSubmit={this.onSignIn.bind(this)} />
+      return <Login onSubmit={this.onSignIn.bind(this)} />;
     }
     if (screen_ === 'Chat') {
-      return <Chat username={username_} roomId={roomid_} />
+      return <Chat username={username_} roomId={roomid_} />;
     }
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   screen: state.screen,
-  username : state.username,
-  roomId: state.roomId
+  username: state.username,
+  roomId: state.roomId,
 });
 
-export default connect(mapStateToProps) (App)
+export default connect(mapStateToProps)(App);

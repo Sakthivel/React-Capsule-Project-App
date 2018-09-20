@@ -1,125 +1,120 @@
-import { createStore }  from "redux";
-import TalkingApp from "../TalkingApp/";
-const should = require("chai").should();
-const expect = require("chai").expect;
+import { createStore } from 'redux';
+import TalkingApp from '../TalkingApp';
 
-describe("TalkingApp unit testing", function() {
+const should = require('chai').should();
+const expect = require('chai').expect;
 
-	it("should GET_USERNAME", function() {
-		const currState = {
-			username: ""
-		};
+describe('TalkingApp unit testing', () => {
+  it('should GET_USERNAME', () => {
+    const currState = {
+      username: '',
+    };
 
-		const store = createStore(TalkingApp, currState);
+    const store = createStore(TalkingApp, currState);
 
-		const action = {
-			type: "GET_USERNAME",
-			username : "sakthi"
-		};
+    const action = {
+      type: 'GET_USERNAME',
+      username: 'sakthi',
+    };
 
-		store.dispatch(action);
+    store.dispatch(action);
 
-		store.getState().should.have.property("username");
-		store.getState().should.have.property("username").and.equal("sakthi");
-	});
+    store.getState().should.have.property('username');
+    store.getState().should.have.property('username').and.equal('sakthi');
+  });
 
-	it("should SET_USERNAME", function() {
+  it('should SET_USERNAME', () => {
+    const currState = {
+      username: '',
+    };
 
-		const currState = {
-			username: ""
-		};
+    const store = createStore(TalkingApp, currState);
 
-		const store = createStore(TalkingApp, currState);
+    const action = {
+      type: 'SET_USERNAME',
+      username: 'sakthi',
+    };
 
-		const action = {
-			type: "SET_USERNAME",
-			username : "sakthi"
-		};
+    store.dispatch(action);
 
-		store.dispatch(action);
+    store.getState().should.have.property('username');
+    store.getState().should.have.property('screen');
+    store.getState().should.have.property('username').and.equal('sakthi');
+    store.getState().should.have.property('screen').and.equal('Chat');
+  });
 
-		store.getState().should.have.property("username");
-		store.getState().should.have.property("screen");
-		store.getState().should.have.property("username").and.equal("sakthi");
-		store.getState().should.have.property("screen").and.equal("Chat");
-	});
+  it('should SET_MESSAGE', () => {
+    const currState = {
+      username: 'sakthi',
+    };
 
-	it("should SET_MESSAGE", function() {
+    const store = createStore(TalkingApp, currState);
 
-		const currState = {
-			username: "sakthi",
-		};
+    const action = {
+      type: 'SET_MESSAGE',
+      messages: 'Hello Friends!',
+    };
 
-		const store = createStore(TalkingApp, currState);
+    store.dispatch(action);
 
-		const action = {
-			type: "SET_MESSAGE",
-			messages : "Hello Friends!"
-		};
+    store.getState().should.have.property('username');
+    store.getState().should.have.property('screen');
+    store.getState().should.have.property('messages');
+    store.getState().should.have.property('username').and.equal('sakthi');
+    store.getState().should.have.property('screen').and.equal('Chat');
+    store.getState().should.have.property('messages').and.equal('Hello Friends!');
+  });
 
-		store.dispatch(action);
+  it('should SET_NEW_ROOM', () => {
+    const currState = {
+      username: 'sakthi',
+    };
 
-		store.getState().should.have.property("username");
-		store.getState().should.have.property("screen");
-		store.getState().should.have.property("messages");
-		store.getState().should.have.property("username").and.equal("sakthi");
-		store.getState().should.have.property("screen").and.equal("Chat");
-		store.getState().should.have.property("messages").and.equal("Hello Friends!");
-	});
+    const store = createStore(TalkingApp, currState);
 
-	it("should SET_NEW_ROOM", function() {
+    const action = {
+      type: 'SET_NEW_ROOM',
+      room: {
+        id: 100,
+      },
+    };
 
-		const currState = {
-			username: "sakthi",
-		};
+    store.dispatch(action);
 
-		const store = createStore(TalkingApp, currState);
+    const messageText = store.getState().messages[0].text;
 
-		const action = {
-			type: "SET_NEW_ROOM",
-			room: {
-				id: 100
-			}
-		};
+    store.getState().should.have.property('username');
+    store.getState().should.have.property('screen');
+    store.getState().should.have.property('messages');
+    store.getState().should.have.property('username').and.equal('sakthi');
+    store.getState().should.have.property('screen').and.equal('Chat');
+    store.getState().should.have.property('messages').to.be.a('array');
+    expect(messageText).to.equal('NEW ROOM HAS CREATED!!');
+  });
 
-		store.dispatch(action);
+  it('should SET_NEW_USER', () => {
+    const currState = {
+      username: 'sakthi',
+    };
 
-		const messageText = store.getState().messages[0].text;
+    const store = createStore(TalkingApp, currState);
 
-		store.getState().should.have.property("username");
-		store.getState().should.have.property("screen");
-		store.getState().should.have.property("messages");
-		store.getState().should.have.property("username").and.equal("sakthi");
-		store.getState().should.have.property("screen").and.equal("Chat");
-		store.getState().should.have.property("messages").to.be.a("array");
-		expect(messageText).to.equal("NEW ROOM HAS CREATED!!");
-	});
+    const action = {
+      type: 'SET_NEW_USER',
+      roomId: '123',
+      user: 'hello',
+    };
 
-	it("should SET_NEW_USER", function() {
+    store.dispatch(action);
 
-		const currState = {
-			username: "sakthi",
-		};
+    const messageText = store.getState().messages[0].text;
 
-		const store = createStore(TalkingApp, currState);
-
-		const action = {
-			type: "SET_NEW_USER",
-			roomId: "123",
-			user: "hello"
-		};
-
-		store.dispatch(action);
-
-		const messageText = store.getState().messages[0].text;
-
-		store.getState().should.have.property("username");
-		store.getState().should.have.property("screen");
-		store.getState().should.have.property("messages");
-		store.getState().should.have.property("username").and.equal("sakthi");
-		store.getState().should.have.property("screen").and.equal("Chat");
-		store.getState().should.have.property("messages").to.be.a("array");
-		expect(messageText).to.equal("NEW USER HAS ADDED HERE!!");
-	});
-
+    store.getState().should.have.property('username');
+    store.getState().should.have.property('screen');
+    store.getState().should.have.property('messages');
+    store.getState().should.have.property('username').and.equal('sakthi');
+    store.getState().should.have.property('screen').and.equal('Chat');
+    store.getState().should.have.property('messages').to.be.a('array');
+    expect(messageText).to.equal('NEW USER HAS ADDED HERE!!');
+  });
 });
